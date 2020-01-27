@@ -21,13 +21,15 @@ impl Renderer {
             rectangle(
                 player.color,
                 player_rect,
-                c.transform.trans(player.render_x, player.render_y),
+                c.transform.trans(player.render_x - player.scale / 2.0, player.render_y - player.scale / 2.0),
                 gl
             );
             rectangle(
                 BACKGROUND,
                 player_rect,
-                c.transform.trans(player.render_x, player.render_y).scale(0.95),
+                c.transform.trans(player.render_x - player.scale * (1.0 - player.outline_scale) / 2.0,
+                player.render_y - player.scale * (1.0 - player.outline_scale) / 2.0)
+                .scale(1.0 - player.outline_scale, 1.0 - player.outline_scale),
                 gl,
             );
         });
