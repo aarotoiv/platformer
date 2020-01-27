@@ -12,7 +12,7 @@ pub struct Player {
     pub outline_scale: f64,
     pub color: [f32;4],
     keys: Keys,
-    pub direction: i8
+    pub direction: f64
 }
 
 struct Keys {
@@ -31,22 +31,24 @@ impl Player {
             scale: 50.0,
             color: [1.0, 1.0, 1.0, 1.0],
             keys: Keys {left: false, right: false},
-            direction: 1
+            direction: 1.0
         }
     }
 
     pub fn update(&mut self, args: &UpdateArgs) {
+        const X_ACCEL: f64 = 400.0;
         let mut x_vel = 0.0;
         if self.keys.left {
-            x_vel += -150.0;
-        } else if self.keys.right {
-            x_vel += 150.0;
+            x_vel += -X_ACCEL;
+        }
+        if self.keys.right {
+            x_vel += X_ACCEL;
         }
         
         if x_vel > 0.0 {
-            self.direction = 1;
+            self.direction = 1.0;
         } else if x_vel < 0.0 {
-            self.direction = -1;
+            self.direction = -1.0;
         }
 
         self.x_pos += x_vel * args.dt;

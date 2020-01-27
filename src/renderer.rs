@@ -47,30 +47,15 @@ impl Renderer {
             rectangle(
                 player.color,
                 eye_rect,
-                c.transform.trans(player.render_x - (player.scale * 0.1 / 2.0) - player.scale * 0.1, player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2),
+                c.transform.trans(player.render_x - (player.scale * 0.1 / 2.0) - (player.scale * 0.1) * player.direction, player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2),
                 gl,
             );
             rectangle(
                 player.color,
                 eye_rect,
-                c.transform.trans(player.render_x - (player.scale * 0.1 / 2.0) + player.scale * 0.2, player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2),
+                c.transform.trans(player.render_x - (player.scale * 0.1 / 2.0) + (player.scale * 0.2) * player.direction, player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2),
                 gl,
             );
-            let mouth_rect = rectangle::rectangle_by_corners(0.0, 0.0, player.scale * 0.7, player.scale * 0.4);
-            rectangle(
-                player.color,
-                mouth_rect,
-                c.transform.trans(player.render_x - player.scale * 0.3, player.render_y - player.scale * 0.05),
-                gl,
-             );
-             rectangle(
-                BACKGROUND,
-                mouth_rect,
-                c.transform.trans(player.render_x - player.scale * 0.3 + player.scale * 0.015, player.render_y - player.scale * 0.05 + player.scale * 0.015)
-                .scale(0.95, 0.95),
-                gl,
-
-             );
 
         });
     }
