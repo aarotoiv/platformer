@@ -1,6 +1,7 @@
 use piston::input::{
     Key
 };
+use piston::input::UpdateArgs;
 
 pub struct Player {
     pub x_pos: f64,
@@ -10,7 +11,8 @@ pub struct Player {
     pub scale: f64,
     pub outline_scale: f64,
     pub color: [f32;4],
-    keys: Keys
+    keys: Keys,
+    pub direction: i8
 }
 
 struct Keys {
@@ -28,9 +30,29 @@ impl Player {
             outline_scale: 0.05,
             scale: 50.0,
             color: [1.0, 1.0, 1.0, 1.0],
-            keys: Keys {left: false, right: false}
+            keys: Keys {left: false, right: false},
+            direction: 1
         }
     }
+
+    pub fn update(&mut self, args: &UpdateArgs) {
+        let mut x_vel = 0.0;
+        if self.keys.left {
+            x_vel += -150.0;
+        } else if self.keys.right {
+            x_vel += 150.0;
+        }
+        
+        if x_vel > 0.0 {
+            self.direction = 1;
+        } else if x_vel < 0.0 {
+            self.direction = -1;
+        }
+
+        self.x_pos += x_vel * args.dt;
+
+    }
+
     pub fn handle_press(&mut self, key: Key) {
         match key {
             Key::A => {

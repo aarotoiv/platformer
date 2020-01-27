@@ -47,7 +47,7 @@ fn main() {
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
         if let Some(u) = e.update_args() {
-            println!("UPDATE");
+            player.update(&u);
         }
         if let Some(r) = e.render_args() {
             render.render(&r, &player, &world);
