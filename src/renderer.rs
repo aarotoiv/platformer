@@ -32,6 +32,19 @@ impl Renderer {
                 .scale(1.0 - player.outline_scale, 1.0 - player.outline_scale),
                 gl,
             );
+            let eye_rect = rectangle::square(0.0, 0.0, player.scale * 0.1);
+            rectangle(
+                player.color,
+                eye_rect,
+                c.transform.trans(player.render_x - (player.scale * 0.1 / 2.0) - player.scale * 0.1, player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2),
+                gl,
+            );
+            rectangle(
+                player.color,
+                eye_rect,
+                c.transform.trans(player.render_x - (player.scale * 0.1 / 2.0) + player.scale * 0.2, player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2),
+                gl,
+            );
         });
     }
 }
