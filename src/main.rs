@@ -4,8 +4,10 @@ extern crate opengl_graphics;
 extern crate piston;
 extern crate find_folder;
 
+mod player;
 mod renderer;
 
+use player::Player;
 use renderer::Renderer;
 
 use piston_window::*;
@@ -36,13 +38,16 @@ fn main() {
         gl: GlGraphics::new(opengl),
     };
 
+    let player = Player::new(&window_width, &window_height);
+
+
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
         if let Some(u) = e.update_args() {
             println!("UPDATE");
         }
         if let Some(r) = e.render_args() {
-            render.render(&r);
+            render.render(&r, &player);
         }
         if let Some(b) = e.press_args() {
             handle_press(&b);
