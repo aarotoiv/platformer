@@ -6,9 +6,11 @@ extern crate find_folder;
 
 mod player;
 mod renderer;
+mod world;
 
 use player::Player;
 use renderer::Renderer;
+use world::World;
 
 use piston_window::*;
 use opengl_graphics::{GlGraphics, OpenGL};
@@ -38,8 +40,9 @@ fn main() {
         gl: GlGraphics::new(opengl),
     };
 
-    let player = Player::new(&window_width, &window_height);
-
+    let mut player = Player::new(&window_width, &window_height);
+    let mut world = World::new();
+    world.initialize();
 
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
@@ -47,50 +50,38 @@ fn main() {
             println!("UPDATE");
         }
         if let Some(r) = e.render_args() {
-            render.render(&r, &player);
+            render.render(&r, &player, &world);
         }
         if let Some(b) = e.press_args() {
-            handle_press(&b);
+            handle_press(&b, &mut player);
         }
         if let Some(b) = e.release_args() {
-            handle_release(&b);
+            handle_release(&b, &mut player);
         }
     }
 }
-fn handle_press(args: &Button) {
+fn handle_press(args: &Button, player: &mut Player) {
     if let &Button::Keyboard(key) = args {
         match key {
             Key::A => {
-                println!("A DOWN");
+                player.handle_press(Key::A);
             }
             Key::D => {
-                println!("D DOWN");
-            }
-            Key::W => {
-                println!("W DOWN");
-            }
-            Key::S => {
-                println!("S DOWN");
+                player.handle_press(Key::D);
             }
             _ => {}
         }
     }
 }
 
-fn handle_release(args: &Button) {
+fn handle_release(args: &Button, player: &mut Player) {
     if let &Button::Keyboard(key) = args {
         match key {
             Key::A => {
-                println!("A RELEASED");
+                player.handle_release(Key::A);
             }
             Key::D => {
-                println!("D RELEASED");
-            }
-            Key::W => {
-                println!("W RELEASED");
-            }
-            Key::S => {
-                println!("S RELEASED");
+                player.handle_release(Key::D);
             }
             _ => {}
         }
