@@ -24,6 +24,12 @@ impl Renderer {
                 c.transform.trans(player.render_x, player.render_y),
                 gl
             );
+            rectangle(
+                BACKGROUND,
+                player_rect,
+                c.transform.trans(player.render_x, player.render_y).scale(0.95),
+                gl,
+            );
         });
     }
 }
