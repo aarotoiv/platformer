@@ -14,12 +14,20 @@ pub struct Player {
     pub color: [f32;4],
     keys: Keys,
     pub direction: f64,
-    falling: bool
+    falling: bool,
+    touches: Touches
 }
 
 struct Keys {
     left: bool,
     right: bool
+}
+
+struct Touches {
+    left: bool,
+    right: bool,
+    top: bool,
+    bottom: bool
 }
 
 impl Player {
@@ -34,7 +42,8 @@ impl Player {
             color: [1.0, 1.0, 1.0, 1.0],
             keys: Keys {left: false, right: false},
             direction: 1.0,
-            falling: true
+            falling: true,
+            touches: Touches {left: false, right: false, top: false, bottom: false}
         }
     }
 
@@ -68,7 +77,14 @@ impl Player {
     }
 
     pub fn handle_collisions(&mut self, world: &World) {
+        for block in world.blocks.iter() {
+            let b_width = block.end_x - block.start_x;
+            let b_height = block.end_y - block.start_y;
+            let b_x = (block.start_x + block.end_x) / 2.0;
+            let b_y = (block.start_y + block.end_y) / 2.0;
 
+
+        }
     }
 
     pub fn handle_press(&mut self, key: Key) {
