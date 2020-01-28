@@ -20,7 +20,7 @@ impl Renderer {
             for block in world.blocks.iter() {
                 let block_rect = rectangle::rectangle_by_corners(block.start_x, block.start_y, block.end_x, block.end_y);
                 rectangle(
-                    [1.0, 1.0, 1.0, 1.0],
+                    [0.5, 0.5, 0.5, 1.0],
                     block_rect,
                     c.transform.trans(player.render_x - player.x_pos, player.render_y - player.y_pos),
                     gl
