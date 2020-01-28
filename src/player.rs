@@ -1,8 +1,6 @@
-use piston::input::{
-    Key
-};
-use piston::input::UpdateArgs;
 use crate::world::World;
+use piston::input::Key;
+use piston::input::UpdateArgs;
 
 pub struct Player {
     pub x_pos: f64,
@@ -15,24 +13,24 @@ pub struct Player {
     pub render_y: f64,
     pub scale: f64,
     pub outline_scale: f64,
-    pub color: [f32;4],
+    pub color: [f32; 4],
     keys: Keys,
     pub direction: f64,
     falling: bool,
     touches: Touches,
-    wants_to_jump: bool
+    wants_to_jump: bool,
 }
 
 struct Keys {
     left: bool,
-    right: bool
+    right: bool,
 }
 
 struct Touches {
     left: bool,
     right: bool,
     top: bool,
-    bottom: bool
+    bottom: bool,
 }
 
 impl Player {
@@ -49,27 +47,35 @@ impl Player {
             outline_scale: 0.05,
             scale: 50.0,
             color: [1.0, 1.0, 1.0, 1.0],
-            keys: Keys {left: false, right: false},
+            keys: Keys {
+                left: false,
+                right: false,
+            },
             direction: 1.0,
             falling: true,
-            touches: Touches {left: false, right: false, top: false, bottom: false},
-            wants_to_jump: false
+            touches: Touches {
+                left: false,
+                right: false,
+                top: false,
+                bottom: false,
+            },
+            wants_to_jump: false,
         }
     }
 
     pub fn update(&mut self, args: &UpdateArgs) {
         const X_ACCEL: f64 = 40.0;
-        const Y_ACCEL: f64 = 50.0;
+        const Y_ACCEL: f64 = 30.0;
         const X_MIN_CAP: f64 = -800.0;
         const X_MAX_CAP: f64 = 800.0;
-        const JUMP_START: f64 = -2000.0;
+        const JUMP_START: f64 = -1500.0;
 
         self.prev_x = self.x_pos;
         self.prev_y = self.y_pos;
 
         self.falling = !self.touches.bottom;
 
-        if self.keys.left && self.x_vel > X_MIN_CAP{
+        if self.keys.left && self.x_vel > X_MIN_CAP {
             self.x_vel += -X_ACCEL;
         }
         if self.keys.right && self.x_vel < X_MAX_CAP {
@@ -95,7 +101,7 @@ impl Player {
         if self.x_vel > 0.0 && self.touches.right {
             self.x_vel = 0.0;
         }
-        
+
         if self.x_vel > 0.0 {
             self.direction = 1.0;
         } else if self.x_vel < 0.0 {
@@ -117,7 +123,7 @@ impl Player {
     pub fn handle_collisions(&mut self, world: &World) {
         let mut bottom = false;
         //let mut top = false;
-        let mut left = false; 
+        let mut left = false;
         let mut right = false;
 
         for block in world.blocks.iter() {
@@ -126,27 +132,35 @@ impl Player {
             let b_x = (block.start_x + block.end_x) / 2.0;
             let b_y = (block.start_y + block.end_y) / 2.0;
 
-            if self.x_pos - self.scale / 2.0 < b_x + b_width / 2.0 && self.x_pos + self.scale / 2.0 > b_x - b_width / 2.0
-            && self.y_pos + self.scale / 2.0 < b_y + b_height / 2.0 && self.y_pos + self.scale / 2.0 > b_y - b_height / 2.0 
-            && self.prev_y < b_y - b_height / 2.0 {   
+            if self.x_pos - self.scale / 2.0 < b_x + b_width / 2.0
+                && self.x_pos + self.scale / 2.0 > b_x - b_width / 2.0
+                && self.y_pos + self.scale / 2.0 < b_y + b_height / 2.0
+                && self.y_pos + self.scale / 2.0 > b_y - b_height / 2.0
+                && self.prev_y < b_y - b_height / 2.0
+            {
                 bottom = true;
-                self.y_pos -= (self.y_pos + self.scale / 2.0) - (b_y - b_height / 2.0);  
+                self.y_pos -= (self.y_pos + self.scale / 2.0) - (b_y - b_height / 2.0);
             }
 
-            if self.y_pos + self.scale / 2.0 > b_y - b_height / 2.0 && self.y_pos - self.scale / 2.0 < b_y + b_height / 2.0 {
-                if self.x_pos + self.scale / 2.0 > b_x - b_width / 2.0 && self.x_pos + self.scale / 2.0 < b_x + b_width / 2.0 
-                && self.prev_x < b_x - b_width / 2.0 {
+            if self.y_pos + self.scale / 2.0 > b_y - b_height / 2.0
+                && self.y_pos - self.scale / 2.0 < b_y + b_height / 2.0
+            {
+                if self.x_pos + self.scale / 2.0 > b_x - b_width / 2.0
+                    && self.x_pos + self.scale / 2.0 < b_x + b_width / 2.0
+                    && self.prev_x < b_x - b_width / 2.0
+                {
                     right = true;
                     self.x_pos -= (self.x_pos + self.scale / 2.0) - (b_x - b_width / 2.0);
                 }
 
-                if self.x_pos - self.scale / 2.0 < b_x + b_width / 2.0 && self.x_pos - self.scale / 2.0 > b_x - b_width / 2.0 
-                && self.prev_x > b_x + b_width / 2.0 {
+                if self.x_pos - self.scale / 2.0 < b_x + b_width / 2.0
+                    && self.x_pos - self.scale / 2.0 > b_x - b_width / 2.0
+                    && self.prev_x > b_x + b_width / 2.0
+                {
                     left = true;
                     self.x_pos -= (self.x_pos - self.scale / 2.0) - (b_x + b_width / 2.0);
                 }
             }
-            
         }
 
         self.touches.bottom = bottom;

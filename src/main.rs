@@ -1,8 +1,8 @@
-extern crate piston_window;
+extern crate find_folder;
 extern crate graphics;
 extern crate opengl_graphics;
 extern crate piston;
-extern crate find_folder;
+extern crate piston_window;
 
 mod player;
 mod renderer;
@@ -12,20 +12,17 @@ use player::Player;
 use renderer::Renderer;
 use world::World;
 
-use piston_window::*;
 use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{EventSettings, Events};
-use piston::input::{
-    Button, Key, PressEvent, ReleaseEvent, RenderEvent, UpdateEvent,
-};
+use piston::input::{Button, Key, PressEvent, ReleaseEvent, RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
+use piston_window::*;
 
 fn main() {
     let opengl = OpenGL::V3_2;
 
     let window_width = 1600;
     let window_height = 900;
-
 
     let mut window: PistonWindow = WindowSettings::new("meme", [window_width, window_height])
         .samples(16)

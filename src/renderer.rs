@@ -18,12 +18,20 @@ impl Renderer {
             clear(BACKGROUND, gl);
 
             for block in world.blocks.iter() {
-                let block_rect = rectangle::rectangle_by_corners(block.start_x, block.start_y, block.end_x, block.end_y);
+                let block_rect = rectangle::rectangle_by_corners(
+                    block.start_x,
+                    block.start_y,
+                    block.end_x,
+                    block.end_y,
+                );
                 rectangle(
                     [0.5, 0.5, 0.5, 1.0],
                     block_rect,
-                    c.transform.trans(player.render_x - player.x_pos, player.render_y - player.y_pos),
-                    gl
+                    c.transform.trans(
+                        player.render_x - player.x_pos,
+                        player.render_y - player.y_pos,
+                    ),
+                    gl,
                 )
             }
 
@@ -32,31 +40,45 @@ impl Renderer {
             rectangle(
                 player.color,
                 player_rect,
-                c.transform.trans(player.render_x - player.scale / 2.0, player.render_y - player.scale / 2.0),
-                gl
+                c.transform.trans(
+                    player.render_x - player.scale / 2.0,
+                    player.render_y - player.scale / 2.0,
+                ),
+                gl,
             );
             rectangle(
                 BACKGROUND,
                 player_rect,
-                c.transform.trans(player.render_x - player.scale * (1.0 - player.outline_scale) / 2.0,
-                player.render_y - player.scale * (1.0 - player.outline_scale) / 2.0)
-                .scale(1.0 - player.outline_scale, 1.0 - player.outline_scale),
+                c.transform
+                    .trans(
+                        player.render_x - player.scale * (1.0 - player.outline_scale) / 2.0,
+                        player.render_y - player.scale * (1.0 - player.outline_scale) / 2.0,
+                    )
+                    .scale(1.0 - player.outline_scale, 1.0 - player.outline_scale),
                 gl,
             );
             let eye_rect = rectangle::square(0.0, 0.0, player.scale * 0.1);
             rectangle(
                 player.color,
                 eye_rect,
-                c.transform.trans(player.render_x - (player.scale * 0.1 / 2.0) - (player.scale * 0.1) * player.direction, player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2),
+                c.transform.trans(
+                    player.render_x
+                        - (player.scale * 0.1 / 2.0)
+                        - (player.scale * 0.1) * player.direction,
+                    player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2,
+                ),
                 gl,
             );
             rectangle(
                 player.color,
                 eye_rect,
-                c.transform.trans(player.render_x - (player.scale * 0.1 / 2.0) + (player.scale * 0.2) * player.direction, player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2),
+                c.transform.trans(
+                    player.render_x - (player.scale * 0.1 / 2.0)
+                        + (player.scale * 0.2) * player.direction,
+                    player.render_y - (player.scale * 0.1 / 2.0) - player.scale * 0.2,
+                ),
                 gl,
             );
-
         });
     }
 }
