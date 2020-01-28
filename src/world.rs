@@ -23,6 +23,12 @@ impl World {
             end_x: 900.0,
             end_y: 500.0
         });
+        self.blocks.push(Block {
+            start_x: -500.0,
+            start_y: 200.0,
+            end_x: -100.0,
+            end_y: 500.0
+        });
     }
 }
 

@@ -78,8 +78,6 @@ impl Player {
             y_vel += Y_ACCEL;
         }
 
-
-
         self.x_pos += x_vel * args.dt;
         self.y_pos += y_vel * args.dt;
 
@@ -88,7 +86,7 @@ impl Player {
     pub fn handle_collisions(&mut self, world: &World) {
         let mut bottom = false;
         //let mut top = false;
-        //let mut left = false; 
+        let mut left = false; 
         let mut right = false;
 
         for block in world.blocks.iter() {
@@ -110,12 +108,19 @@ impl Player {
                     right = true;
                     self.x_pos -= (self.x_pos + self.scale / 2.0) - (b_x - b_width / 2.0);
                 }
+
+                if self.x_pos - self.scale / 2.0 < b_x + b_width / 2.0 && self.x_pos - self.scale / 2.0 > b_x - b_width / 2.0 
+                && self.prev_x > b_x + b_width / 2.0 {
+                    left = true;
+                    self.x_pos -= (self.x_pos - self.scale / 2.0) - (b_x + b_width / 2.0);
+                }
             }
             
         }
 
         self.touches.bottom = bottom;
         self.touches.right = right;
+        self.touches.left = left;
     }
 
     pub fn handle_press(&mut self, key: Key) {
