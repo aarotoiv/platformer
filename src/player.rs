@@ -58,8 +58,10 @@ impl Player {
     }
 
     pub fn update(&mut self, args: &UpdateArgs) {
-        const X_ACCEL: f64 = 500.0;
+        const X_ACCEL: f64 = 40.0;
         const Y_ACCEL: f64 = 50.0;
+        const X_MIN_CAP: f64 = -800.0;
+        const X_MAX_CAP: f64 = 800.0;
         const JUMP_START: f64 = -2000.0;
 
         self.prev_x = self.x_pos;
@@ -67,36 +69,49 @@ impl Player {
 
         self.falling = !self.touches.bottom;
 
-        let mut x_vel = 0.0;
-
-        if self.keys.left {
-            x_vel += -X_ACCEL;
+        if self.keys.left && self.x_vel > X_MIN_CAP{
+            self.x_vel += -X_ACCEL;
         }
-        if self.keys.right {
-            x_vel += X_ACCEL;
+        if self.keys.right && self.x_vel < X_MAX_CAP {
+            self.x_vel += X_ACCEL;
         }
 
-        if !self.keys.right && !self.keys.left {
-            
+        if !self.keys.right && !self.keys.left && self.x_vel != 0.0 {
+            if self.x_vel > 0.0 {
+                self.x_vel -= 30.0;
+            } else if self.x_vel < 0.0 {
+                self.x_vel += 30.0;
+            }
+
+            if self.x_vel.abs() < 30.0 {
+                self.x_vel = 0.0;
+            }
+        }
+
+        if self.x_vel < 0.0 && self.touches.left {
+            self.x_vel = 0.0;
+        }
+
+        if self.x_vel > 0.0 && self.touches.right {
+            self.x_vel = 0.0;
         }
         
-        if x_vel > 0.0 {
+        if self.x_vel > 0.0 {
             self.direction = 1.0;
-        } else if x_vel < 0.0 {
+        } else if self.x_vel < 0.0 {
             self.direction = -1.0;
         }
 
         if self.falling {
             self.y_vel += Y_ACCEL;
         }
-        println!("{}", self.falling);
+
         if self.wants_to_jump && !self.falling {
             self.y_vel = JUMP_START;
         }
-        //println!("{}", y_vel);
-        self.x_pos += x_vel * args.dt;
-        self.y_pos += self.y_vel * args.dt;
 
+        self.x_pos += self.x_vel * args.dt;
+        self.y_pos += self.y_vel * args.dt;
     }
 
     pub fn handle_collisions(&mut self, world: &World) {
