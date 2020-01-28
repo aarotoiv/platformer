@@ -2,6 +2,7 @@ use piston::input::{
     Key
 };
 use piston::input::UpdateArgs;
+use crate::world::World;
 
 pub struct Player {
     pub x_pos: f64,
@@ -12,7 +13,8 @@ pub struct Player {
     pub outline_scale: f64,
     pub color: [f32;4],
     keys: Keys,
-    pub direction: f64
+    pub direction: f64,
+    falling: bool
 }
 
 struct Keys {
@@ -31,13 +33,16 @@ impl Player {
             scale: 50.0,
             color: [1.0, 1.0, 1.0, 1.0],
             keys: Keys {left: false, right: false},
-            direction: 1.0
+            direction: 1.0,
+            falling: true
         }
     }
 
     pub fn update(&mut self, args: &UpdateArgs) {
         const X_ACCEL: f64 = 400.0;
+        const Y_ACCEL: f64 = 400.0;
         let mut x_vel = 0.0;
+        let mut y_vel = 0.0;
         if self.keys.left {
             x_vel += -X_ACCEL;
         }
@@ -51,7 +56,18 @@ impl Player {
             self.direction = -1.0;
         }
 
+        if self.falling {
+            y_vel += Y_ACCEL;
+        }
+
+
+
         self.x_pos += x_vel * args.dt;
+        self.y_pos += y_vel * args.dt;
+
+    }
+
+    pub fn handle_collisions(&mut self, world: &World) {
 
     }
 

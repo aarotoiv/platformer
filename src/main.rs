@@ -48,6 +48,7 @@ fn main() {
     while let Some(e) = events.next(&mut window) {
         if let Some(u) = e.update_args() {
             player.update(&u);
+            player.handle_collisions(&world);
         }
         if let Some(r) = e.render_args() {
             render.render(&r, &player, &world);
