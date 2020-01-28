@@ -89,7 +89,7 @@ impl Player {
         let mut bottom = false;
         //let mut top = false;
         //let mut left = false; 
-        //let mut right = false;
+        let mut right = false;
 
         for block in world.blocks.iter() {
             let b_width = block.end_x - block.start_x;
@@ -103,10 +103,19 @@ impl Player {
                 bottom = true;
                 self.y_pos -= (self.y_pos + self.scale / 2.0) - (b_y - b_height / 2.0);  
             }
+
+            if self.y_pos + self.scale / 2.0 > b_y - b_height / 2.0 && self.y_pos - self.scale / 2.0 < b_y + b_height / 2.0 {
+                if self.x_pos + self.scale / 2.0 > b_x - b_width / 2.0 && self.x_pos + self.scale / 2.0 < b_x + b_width / 2.0 
+                && self.prev_x < b_x - b_width / 2.0 {
+                    right = true;
+                    self.x_pos -= (self.x_pos + self.scale / 2.0) - (b_x - b_width / 2.0);
+                }
+            }
             
         }
 
         self.touches.bottom = bottom;
+        self.touches.right = right;
     }
 
     pub fn handle_press(&mut self, key: Key) {

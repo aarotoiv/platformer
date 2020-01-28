@@ -17,6 +17,12 @@ impl World {
     }
     pub fn initialize(&mut self) {
         self.blocks.push(Block::new());
+        self.blocks.push(Block {
+            start_x: 600.0,
+            start_y: 200.0,
+            end_x: 900.0,
+            end_y: 500.0
+        });
     }
 }
 
