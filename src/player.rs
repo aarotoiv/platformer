@@ -17,7 +17,10 @@ pub struct Player {
     keys: Keys,
     pub direction: f64,
     falling: bool,
-    touches: Touches
+    touches: Touches,
+    jumping: bool,
+    jump_height: f64,
+    wants_to_jump: bool
 }
 
 struct Keys {
@@ -47,20 +50,30 @@ impl Player {
             keys: Keys {left: false, right: false},
             direction: 1.0,
             falling: true,
-            touches: Touches {left: false, right: false, top: false, bottom: false}
+            touches: Touches {left: false, right: false, top: false, bottom: false},
+            jumping: false,
+            jump_height: 0.0,
+            wants_to_jump: false
         }
     }
 
     pub fn update(&mut self, args: &UpdateArgs) {
+        const X_ACCEL: f64 = 400.0;
+        const Y_ACCEL: f64 = 400.0;
+        const MAX_JUMP: f64 = -200.0;
+
         self.prev_x = self.x_pos;
         self.prev_y = self.y_pos;
 
-        self.falling = !self.touches.bottom;
+        self.falling = !self.touches.bottom && !self.jumping;
 
-        const X_ACCEL: f64 = 400.0;
-        const Y_ACCEL: f64 = 400.0;
+        if self.touches.bottom {
+            self.jump_height = 0.0;
+        }
+
         let mut x_vel = 0.0;
         let mut y_vel = 0.0;
+
         if self.keys.left {
             x_vel += -X_ACCEL;
         }
@@ -76,6 +89,19 @@ impl Player {
 
         if self.falling {
             y_vel += Y_ACCEL;
+        }
+
+        if self.wants_to_jump && !self.jumping && !self.falling {
+            self.jumping = true;
+        }
+
+        if self.jumping && self.jump_height > MAX_JUMP {
+            y_vel += MAX_JUMP * 2.0;
+            self.jump_height += MAX_JUMP * 2.0 * args.dt;
+        } 
+
+        if self.jumping && self.jump_height < MAX_JUMP {
+            self.jumping = false;
         }
 
         self.x_pos += x_vel * args.dt;
@@ -131,6 +157,9 @@ impl Player {
             Key::D => {
                 self.keys.right = true;
             }
+            Key::Space => {
+                self.wants_to_jump = true;
+            }
             _ => {}
         }
     }
@@ -141,6 +170,9 @@ impl Player {
             }
             Key::D => {
                 self.keys.right = false;
+            }
+            Key::Space => {
+                self.wants_to_jump = false;
             }
             _ => {}
         }

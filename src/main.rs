@@ -70,6 +70,9 @@ fn handle_press(args: &Button, player: &mut Player) {
             Key::D => {
                 player.handle_press(Key::D);
             }
+            Key::Space => {
+                player.handle_press(Key::Space);
+            }
             _ => {}
         }
     }
@@ -83,6 +86,9 @@ fn handle_release(args: &Button, player: &mut Player) {
             }
             Key::D => {
                 player.handle_release(Key::D);
+            }
+            Key::Space => {
+                player.handle_release(Key::Space);
             }
             _ => {}
         }
