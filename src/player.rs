@@ -29,7 +29,8 @@ pub struct Spark {
     pub y_pos: f64,
     pub scale: f64,
     x_vel: f64,
-    y_vel: f64
+    y_vel: f64,
+    time: f64
 }
 struct Keys {
     left: bool,
@@ -135,6 +136,17 @@ impl Player {
 
         self.x_pos += self.x_vel * args.dt;
         self.y_pos += self.y_vel * args.dt;
+
+        self.update_sparks(args);
+    }
+
+    fn update_sparks(&mut self, args: &UpdateArgs) {
+        self.sparks.retain(|s| s.time <= 1.0);
+        for i in 0..self.sparks.len() {
+            self.sparks[i].x_pos += self.sparks[i].x_vel * args.dt;
+            self.sparks[i].y_pos += self.sparks[i].y_vel * args.dt;
+            self.sparks[i].time += args.dt;
+        }
     }
 
     pub fn handle_collisions(&mut self, world: &World) {
@@ -197,7 +209,8 @@ impl Player {
                                 y_pos: self.y_pos + self.scale / 2.0,
                                 scale: rng.gen_range(2.0, 6.0),
                                 x_vel: rng.gen_range(-100.0 * (self.y_vel / 500.0), -10.0),
-                                y_vel: rng.gen_range(-100.0, -10.0)
+                                y_vel: rng.gen_range(-100.0, -10.0),
+                                time: 0.0
                             }
                         );
                     } else {
@@ -207,7 +220,8 @@ impl Player {
                                 y_pos: self.y_pos + self.scale / 2.0,
                                 scale: rng.gen_range(2.0, 6.0),
                                 x_vel: rng.gen_range(10.0, 100.0 * (self.y_vel / 500.0)),
-                                y_vel: rng.gen_range(-100.0, -10.0)
+                                y_vel: rng.gen_range(-100.0, -10.0),
+                                time: 0.0
                             }
                         );
                     }
