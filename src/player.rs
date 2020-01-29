@@ -211,7 +211,7 @@ impl Player {
                             x_pos: self.x_pos - self.scale / 2.0,
                             y_pos: self.y_pos + self.scale / 2.0,
                             scale: rng.gen_range(1.0, 4.0),
-                            x_vel: rng.gen_range(-100.0 * (self.y_vel / 500.0), -10.0),
+                            x_vel: rng.gen_range(-50.0 * (self.y_vel / 500.0), -5.0 * (self.y_vel / 500.0)),
                             y_vel: rng.gen_range(-100.0, -10.0),
                             time: 0.0
                         }
@@ -222,7 +222,7 @@ impl Player {
                             x_pos: self.x_pos + self.scale / 2.0,
                             y_pos: self.y_pos + self.scale / 2.0,
                             scale: rng.gen_range(1.0, 4.0),
-                            x_vel: rng.gen_range(10.0, 100.0 * (self.y_vel / 500.0)),
+                            x_vel: rng.gen_range(5.0 * (self.y_vel / 500.0), 50.0 * (self.y_vel / 500.0)),
                             y_vel: rng.gen_range(-100.0, -10.0),
                             time: 0.0
                         }
