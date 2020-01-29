@@ -2,6 +2,9 @@ use crate::world::World;
 use piston::input::Key;
 use piston::input::UpdateArgs;
 
+extern crate rand;
+use rand::Rng;
+
 pub struct Player {
     pub x_pos: f64,
     pub y_pos: f64,
@@ -19,8 +22,15 @@ pub struct Player {
     falling: bool,
     touches: Touches,
     wants_to_jump: bool,
+    sparks: Vec<Spark>
 }
-
+pub struct Spark {
+    x_pos: f64,
+    y_pos: f64,
+    scale: f64,
+    x_vel: f64,
+    y_vel: f64
+}
 struct Keys {
     left: bool,
     right: bool,
@@ -60,6 +70,7 @@ impl Player {
                 bottom: false,
             },
             wants_to_jump: false,
+            sparks: Vec::new()
         }
     }
 
@@ -111,6 +122,12 @@ impl Player {
         if self.falling {
             self.y_vel += Y_ACCEL;
         }
+
+        if self.touches.bottom && self.y_vel > 200.0 {
+            self.add_collision_sparks();
+            self.y_vel = 0.0;
+        }
+        
 
         if self.wants_to_jump && !self.falling {
             self.y_vel = JUMP_START;
@@ -167,7 +184,38 @@ impl Player {
         self.touches.right = right;
         self.touches.left = left;
     }
-
+    fn add_collision_sparks(&mut self) {
+        let mut rng = rand::thread_rng();
+        for _i in 0..10 {
+            for j in (-1..1).step_by(2) {
+                let random = rng.gen_range(0, 100);
+                if random > 50 {
+                    if j == -1 {
+                        self.sparks.push(
+                            Spark {
+                                x_pos: self.x_pos - self.scale / 2.0,
+                                y_pos: self.y_pos + self.scale / 2.0,
+                                scale: rng.gen_range(2.0, 6.0),
+                                x_vel: rng.gen_range(-100.0 * (self.y_vel / 500.0), -10.0),
+                                y_vel: rng.gen_range(-100.0, -10.0)
+                            }
+                        );
+                    } else {
+                        self.sparks.push(
+                            Spark {
+                                x_pos: self.x_pos - self.scale / 2.0,
+                                y_pos: self.y_pos + self.scale / 2.0,
+                                scale: rng.gen_range(2.0, 6.0),
+                                x_vel: rng.gen_range(10.0, 100.0 * (self.y_vel / 500.0)),
+                                y_vel: rng.gen_range(-100.0, -10.0)
+                            }
+                        );
+                    }
+                }
+            }
+        }
+        //scale: rng.gen_range(5.0, 12.0),
+    }
     pub fn handle_press(&mut self, key: Key) {
         match key {
             Key::A => {
