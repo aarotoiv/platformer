@@ -200,7 +200,6 @@ impl Player {
         let mut rng = rand::thread_rng();
         for _i in 0..5 {
             for j in (-1..2).step_by(2) {
-                println!("{}", j);
                 if j == -1 {
                     self.sparks.push(
                         Spark {
