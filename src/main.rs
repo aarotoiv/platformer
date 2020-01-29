@@ -46,6 +46,7 @@ fn main() {
         if let Some(u) = e.update_args() {
             player.update(&u);
             player.handle_collisions(&world);
+            world.update(&u);
         }
         if let Some(r) = e.render_args() {
             render.render(&r, &player, &world);
