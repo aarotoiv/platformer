@@ -106,19 +106,8 @@ impl Player {
             }
         }
 
-        if self.x_vel < 0.0 && self.touches.left {
-            self.x_vel = 0.0;
-        }
-
-        if self.x_vel > 0.0 && self.touches.right {
-            self.x_vel = 0.0;
-        }
-
-        if self.x_vel > 0.0 {
-            self.direction = 1.0;
-        } else if self.x_vel < 0.0 {
-            self.direction = -1.0;
-        }
+        self.avoid_collision_accel();
+        self.update_facing_direction();
 
         if self.falling {
             self.y_vel += Y_ACCEL;
@@ -146,6 +135,22 @@ impl Player {
             self.sparks[i].x_pos += self.sparks[i].x_vel * args.dt;
             self.sparks[i].y_pos += self.sparks[i].y_vel * args.dt;
             self.sparks[i].time += args.dt;
+        }
+    }
+    fn avoid_collision_accel(&mut self) {
+        if self.x_vel < 0.0 && self.touches.left {
+            self.x_vel = 0.0;
+        }
+
+        if self.x_vel > 0.0 && self.touches.right {
+            self.x_vel = 0.0;
+        }
+    }
+    fn update_facing_direction(&mut self) {
+        if self.x_vel > 0.0 {
+            self.direction = 1.0;
+        } else if self.x_vel < 0.0 {
+            self.direction = -1.0;
         }
     }
 
