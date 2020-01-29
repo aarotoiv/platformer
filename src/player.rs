@@ -225,7 +225,6 @@ impl Player {
                 }
             }
         }
-        //scale: rng.gen_range(5.0, 12.0),
     }
     pub fn handle_press(&mut self, key: Key) {
         match key {
