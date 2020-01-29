@@ -22,12 +22,12 @@ pub struct Player {
     falling: bool,
     touches: Touches,
     wants_to_jump: bool,
-    sparks: Vec<Spark>
+    pub sparks: Vec<Spark>
 }
 pub struct Spark {
-    x_pos: f64,
-    y_pos: f64,
-    scale: f64,
+    pub x_pos: f64,
+    pub y_pos: f64,
+    pub scale: f64,
     x_vel: f64,
     y_vel: f64
 }
