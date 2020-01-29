@@ -38,13 +38,13 @@ impl Renderer {
             let spark_block = rectangle::square(0.0, 0.0, 1.0);
             for spark in player.sparks.iter() {
                 rectangle(
-                    [1.0, 1.0, 1.0, 1.0],
+                    [1.0, 1.0, 1.0, 1.0 - spark.time as f32],
                     spark_block,
                     c.transform.trans(
                         player.render_x - player.x_pos + spark.x_pos,
                         player.render_y - player.y_pos + spark.y_pos
                     )
-                    .scale(spark.scale, spark.scale),
+                    .scale(spark.scale * (1.0 - spark.time), spark.scale * (1.0 - spark.time)),
                     gl,
                 );
             }

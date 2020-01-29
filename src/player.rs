@@ -30,7 +30,7 @@ pub struct Spark {
     pub scale: f64,
     x_vel: f64,
     y_vel: f64,
-    time: f64
+    pub time: f64
 }
 struct Keys {
     left: bool,
@@ -198,33 +198,31 @@ impl Player {
     }
     fn add_collision_sparks(&mut self) {
         let mut rng = rand::thread_rng();
-        for _i in 0..10 {
-            for j in (-1..1).step_by(2) {
-                let random = rng.gen_range(0, 100);
-                if random > 50 {
-                    if j == -1 {
-                        self.sparks.push(
-                            Spark {
-                                x_pos: self.x_pos - self.scale / 2.0,
-                                y_pos: self.y_pos + self.scale / 2.0,
-                                scale: rng.gen_range(2.0, 6.0),
-                                x_vel: rng.gen_range(-100.0 * (self.y_vel / 500.0), -10.0),
-                                y_vel: rng.gen_range(-100.0, -10.0),
-                                time: 0.0
-                            }
-                        );
-                    } else {
-                        self.sparks.push(
-                            Spark {
-                                x_pos: self.x_pos - self.scale / 2.0,
-                                y_pos: self.y_pos + self.scale / 2.0,
-                                scale: rng.gen_range(2.0, 6.0),
-                                x_vel: rng.gen_range(10.0, 100.0 * (self.y_vel / 500.0)),
-                                y_vel: rng.gen_range(-100.0, -10.0),
-                                time: 0.0
-                            }
-                        );
-                    }
+        for _i in 0..5 {
+            for j in (-1..2).step_by(2) {
+                println!("{}", j);
+                if j == -1 {
+                    self.sparks.push(
+                        Spark {
+                            x_pos: self.x_pos - self.scale / 2.0,
+                            y_pos: self.y_pos + self.scale / 2.0,
+                            scale: rng.gen_range(1.0, 4.0),
+                            x_vel: rng.gen_range(-100.0 * (self.y_vel / 500.0), -10.0),
+                            y_vel: rng.gen_range(-100.0, -10.0),
+                            time: 0.0
+                        }
+                    );
+                } else {
+                    self.sparks.push(
+                        Spark {
+                            x_pos: self.x_pos + self.scale / 2.0,
+                            y_pos: self.y_pos + self.scale / 2.0,
+                            scale: rng.gen_range(1.0, 4.0),
+                            x_vel: rng.gen_range(10.0, 100.0 * (self.y_vel / 500.0)),
+                            y_vel: rng.gen_range(-100.0, -10.0),
+                            time: 0.0
+                        }
+                    );
                 }
             }
         }
